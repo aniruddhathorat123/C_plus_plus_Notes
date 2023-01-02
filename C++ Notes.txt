@@ -1,0 +1,231 @@
+
+type conversion in cpp
+
+1: implicit type convesion:
+- automatic type conversion.
+- take place when small size data type conversted to large data type
+- e.g. char to int, int to flat, float to double.
+- int num = char1 + char2;
+
+
+2: explicit type converstion:
+- called a typecasting.
+- may lead to data loss.
+- (type) expression.
+- int res = (int) double1 + 10;
+
+\
+---------
+
+getline() :
+- read the string or line from input stream.
+- read the string having spaces or to process multiline string.
+-  The getline() function extracts characters from the input stream and appends it to the string object until the delimiting character is encountered.
+- istream& getline(istream& is, string& str, char delim);
+- e.g.
+	- #define MAX_NAME_LEN 60
+	- char y_name[MAX_NAME_LEN];
+	- cin.getline (y_name, MAX_NAME_LEN);
+	- cout << "Name: " << y_name << endl;
+
+	- string s;
+	- getline(cin, s);
+	- cout << s;
+
+
+--------------------
+
+types of ppinters:
+
+- link: https://www.geeksforgeeks.org/dangling-void-null-wild-pointers/
+- 
+
+1: Dangling pointer
+- A pointer pointing to a memory location that has been deleted (or freed) is called dangling pointer.
+- like point to the fuction which is no more valid.
+- The pointer pointing to local variable becomes dangling when local variable is not static.
+
+
+2: void pointer:
+- a pointer that points to some data location in storage, which doesn’t have any specific type. 
+- Void refers to the type. Basically the type of data that it points to is can be any. 
+- If we assign address of char data type to void pointer it will become char Pointer, if int data type then int pointer and so on.
+- Any pointer type is convertible to a void pointer hence it can point to any value.
+- void pointer need to dereferenced using the typecasting.
+- e.g. : *( (int*) ptr)
+
+
+3: Null pointer:
+- NULL Pointer is a pointer which is pointing to nothing. In case, if we don’t have address to be assigned to a pointer, then we can simply use NULL. 
+- // Null Pointer
+    int *ptr = NULL;
+    int *ptr2 = 0;
+- value of null pointer is 0.
+
+
+4: Wild pointer:
+- A pointer which has not been initialized to anything (not even NULL) is known as wild pointer.
+- The pointer may be initialized to a non-NULL garbage value that may not be a valid address. 
+- int *p;// wild pointer.
+
+
+
+------------------------------
+
+Dynamic memory allocation:
+- defined in `cstdlib` header file.
+
+1: Malloc 
+- The malloc() function in C++ allocates a block of uninitialized memory to a pointer. It is defined in the cstdlib header file.
+- int* ptr = (int*) malloc(sizeof(int));
+- Here, size is the size of the memory (in bytes) that we want to allocate.
+- mallock returns:
+	- a void pointer to the uninitialized memory block allocated by the function
+	- null pointer if allocation fails
+- // allocate 5 int memory blocks
+  int* ptr = (int*) malloc(5 * sizeof(int));
+
+
+2: Calloc :
+- The calloc() function in C++ allocates a block of memory for an array of objects and initializes all its bits to zero.
+- The calloc() function returns a pointer to the first byte of the allocated memory block if the allocation succeeds.
+- If the size is zero, the value returned depends on the implementation of the library. It may or may not be a null pointer.
+- e.g. : void* calloc(size_t num, size_t size);
+- parameters:
+	- num: An unsigned integral value which represents number of elements.
+	- size: An unsigned integral value which represents the memory block in bytes.
+- int *ptr = (int *)calloc(5, sizeof(int));
+
+
+3: realloc: 
+- The realloc() function in C++ reallocates a block of memory that was previously allocated but not yet freed.
+- The realloc() function reallocates memory that was previously allocated using malloc(), calloc() or realloc() function and yet not freed using the free() function.
+- If the new size is zero, the value returned depends on the implementation of the library. It may or may not return a null pointer.
+- e.g. : void* realloc(void* ptr, size_t new_size);
+- parameters:
+	- ptr: A pointer to the memory block to be reallocated.
+	- new_size: An unsigned integral value which represents the new size of the memory block in bytes.
+- returns value:
+	- A pointer to the beginning of the reallocated memory block.
+	- Null pointer if allocation fails.
+
+
+There are two possible ways of reallocating memory.
+A. Expanding or contracting the same block: The memory block pointed by the old pointer (i.e. ptr) is expanded or contracted, if possible. The contents of the memory block remains unchanged up to the lesser of the new and old sizes. If the area is expanded, the contents of the newly allocated block are undefined.
+
+B. Moving to new location: A new memory block of size new_size bytes is allocated. In this case also, the contents of the memory block remains unchanged up to the lesser of the new and old sizes and if the memory is expanded, the contents of the newly allocated block are undefined.
+
+- int *ptr = (float*) malloc(5*sizeof(float));
+- /* reallocating memory */
+	new_ptr = (float*) realloc(ptr, 10*sizeof(float));
+- /* re-allocating memory with size 0 */
+	new_ptr = (int*) realloc(ptr, 0);
+
+
+---------------------
+
+create 2D array in heap:
+
+- array of size nxm
+
+int **arr = new int*[n];
+for (int i = 0; i < n; i++) {
+	arr[i] = new int[m];
+}
+
+- clear the allocated memory
+- first clear the memory for ecah of the column.
+int **arr = new int*[n];
+for (int i = 0; i < n; i++) {
+	delete[] arr[i];
+}
+delete[] arr;
+
+----------------------
+
+inline and default function:
+
+- in normal function, creats the copy of variables while calling the function.
+- pause the some portion of code to complete.
+- can use inline fuction which replace the fuction call with it's defination.
+inline fun() {
+
+}
+- but time take to copy the code can be huge.
+
+-----------------------
+
+String in cpp
+
+- cin.get(char array, 50 <size>)
+	- more memory cannot be allocated during runtime.
+
+string str;
+getline(cin, str);
+
+- can access string elements by referring index number inside the squre brackets : `[]`.
+
+string str = "Hello";
+cout << str[0];
+
+- 'string' is mutable in c++;
+str[2] = 'i';
+
+
+string str = "hello";
+str.front() = 'H';
+str.back() = '!';
+cout << str 
+*** OP : hello!
+
+
+- concatination of strings
+using + : str1 + str2
+using strcat(str1, str2) : result will be in str1
+using append() method : str1.append(str2) : result will be in str1
+
+- to append char at end of string 
+str.push_back('c')
+
+
+** string comparision:
+- strcmp(const char *char1, const char *char2)
+	- 0 if both strings are equal
+	- < 0 if str1 < str2
+	- > 0 if str1 > str2
+
+- compare() : to compare more efficiently
+- str1.compare(str2)
+	- 0 : both strings are equal.
+	- < 0 : str1 < str2
+	- > 0 : str1 > str2
+
+- Relational operator: know already
+
+- str.size() : length of string
+- reverse(str.begin(), str.end()) : reverse the string
+- sort(str.begin(), str.end()) : sort the char in string
+
+
+- string s(6, 'a');
+ >> aaaaaa
+
+
+
+------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
